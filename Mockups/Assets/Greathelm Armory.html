@@ -1,0 +1,630 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Greathelm Armory</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@500;700&family=Alegreya+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: an armourer's pattern book. Armor as six standing figures ordered light to heavy,
+   weapons laid flat on racks drawn to a shared scale, rules as a small stat grid under each. */
+:root{
+  --bg:#e9ecef; --surface:#f6f7f9; --rack:#dfe4e9; --ink:#1b2430; --muted:#566170; --line:#c3cbd4;
+  --accent:#1f4e8c; --accent-soft:#d5e2f3;
+  --ol:#1b2430; --steel:#a3aebb; --steel-hi:#d3dae1; --wood:#a5733f; --leather:#6e4b34; --brass:#c79a34;
+  --skin:#dcae8e; --cloth:#73865f; --hose:#8a6a52; --linen:#d6c9a4; --hair:#4a3526;
+  --pierced:#b0362d; --pierced-soft:#f1d6d2; --struck:#d9dee4; --imperv:#1f6f5c; --imperv-soft:#cfe8df;
+  --warn:#8a6410; --warn-soft:#f0e2bd;
+  --display:"Grenze Gotisch","Iowan Old Style",Georgia,serif;
+  --body:"Alegreya Sans","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11161c; --surface:#19212a; --rack:#212b36; --ink:#e5e9ee; --muted:#9ba7b4; --line:#313d4a;
+  --accent:#7fb0ee; --accent-soft:#1f3552;
+  --ol:#e2e7ec; --steel:#77879a; --steel-hi:#a9b6c3; --wood:#9c6c3c; --leather:#7a5539; --brass:#cfa544;
+  --skin:#c99a7c; --cloth:#64774f; --hose:#7b5d47; --linen:#b9ac87; --hair:#3a2a1f;
+  --pierced:#ef8a80; --pierced-soft:#4a2320; --struck:#2c3743; --imperv:#6fd0b3; --imperv-soft:#17403a;
+  --warn:#e2bd62; --warn-soft:#43371a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11161c; --surface:#19212a; --rack:#212b36; --ink:#e5e9ee; --muted:#9ba7b4; --line:#313d4a;
+  --accent:#7fb0ee; --accent-soft:#1f3552;
+  --ol:#e2e7ec; --steel:#77879a; --steel-hi:#a9b6c3; --wood:#9c6c3c; --leather:#7a5539; --brass:#cfa544;
+  --skin:#c99a7c; --cloth:#64774f; --hose:#7b5d47; --linen:#b9ac87; --hair:#3a2a1f;
+  --pierced:#ef8a80; --pierced-soft:#4a2320; --struck:#2c3743; --imperv:#6fd0b3; --imperv-soft:#17403a;
+  --warn:#e2bd62; --warn-soft:#43371a; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45}
+.wrap{max-width:1120px;margin:0 auto;padding-block:36px 64px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--display);font-weight:700;margin:0;text-wrap:balance;line-height:1.05}
+h1{font-size:clamp(2.6rem,7vw,4.2rem);letter-spacing:.01em}
+h2{font-size:2rem}
+h3{font-size:1.35rem;font-weight:500}
+p{margin:0}
+.eyebrow{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+header{display:flex;flex-direction:column;gap:10px;border-bottom:2px solid var(--ink);padding-bottom:20px}
+header p{max-width:65ch;color:var(--muted);font-size:1.05rem}
+section{display:flex;flex-direction:column;gap:18px}
+.sec-head{display:flex;flex-direction:column;gap:6px}
+.sec-head p{max-width:68ch;color:var(--muted)}
+.sub{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.sub-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.sub-head span{color:var(--muted);font-size:.95rem}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.9rem;color:var(--muted);align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.chip{display:inline-flex;align-items:center;justify-content:center;min-width:1.7em;height:1.7em;padding:0 .35em;border-radius:4px;
+  font-weight:700;font-size:.85rem;font-variant-numeric:tabular-nums}
+.P{background:var(--pierced-soft);color:var(--pierced)}
+.S{background:var(--struck);color:var(--ink)}
+.I{background:var(--imperv-soft);color:var(--imperv)}
+.bonus{background:var(--accent-soft);color:var(--accent)}
+.lim{background:var(--warn-soft);color:var(--warn)}
+.bar{background:var(--pierced-soft);color:var(--pierced)}
+.none{background:transparent;color:var(--muted)}
+
+/* armor */
+.armor-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.armor{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 10px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.armor svg{width:100%;height:auto;max-height:250px}
+.armor .src{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.dice{display:grid;grid-template-columns:repeat(6,1fr);gap:2px}
+.dice b{display:flex;flex-direction:column;align-items:center;border-radius:3px;padding:3px 0 2px;font-size:.95rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.dice b i{font-style:normal;font-size:.62rem;font-weight:700;letter-spacing:.04em}
+.kv{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:.92rem}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+dl{margin:0}
+.leg-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.leg{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 14px 10px 6px;display:grid;grid-template-columns:96px minmax(0,1fr);gap:8px;align-items:center}
+.leg svg{width:96px;height:auto}
+.leg p{font-size:.95rem} .leg .when{color:var(--muted);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;margin-top:4px}
+
+/* weapons */
+.rack-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.shield-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.wpn{background:var(--surface);border:1px solid var(--line);border-radius:6px;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.wpn .plate{background:var(--rack);border-bottom:1px solid var(--line);padding:6px 8px 0}
+.wpn .plate svg{display:block;width:100%;height:auto}
+.shield-grid .plate svg{max-height:210px}
+.wpn .info{padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px}
+.wpn .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.wpn .top small{color:var(--muted);font-size:.85rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.stats div{display:flex;flex-direction:column;gap:3px;min-width:0}
+.stats span{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.stats .chip{justify-content:flex-start;align-self:flex-start;max-width:100%;height:auto;min-height:1.8em;padding:2px 6px;box-sizing:border-box;line-height:1.15}
+.stats .none{padding-left:0}
+.wpn .fx{font-size:.95rem;color:var(--ink)}
+.wpn .fx:empty{display:none}
+
+/* drawing classes */
+svg .o{stroke:var(--ol);stroke-width:1.3px;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+svg .st{fill:var(--steel)} svg .sh{fill:var(--steel-hi)} svg .wd{fill:var(--wood)} svg .lt{fill:var(--leather)}
+svg .br{fill:var(--brass)} svg .dk{fill:var(--ol)} svg .ln{fill:none} svg .thin{stroke-width:.8px;opacity:.55}
+svg .cord{fill:none;stroke:var(--ol);stroke-width:.9px;vector-effect:non-scaling-stroke;opacity:.8}
+svg .bow-u{fill:none;stroke:var(--ol);stroke-width:5.6px;vector-effect:non-scaling-stroke;stroke-linecap:round}
+svg .bow-w{fill:none;stroke:var(--wood);stroke-width:3px;vector-effect:non-scaling-stroke;stroke-linecap:round}
+svg .bow-s{fill:none;stroke:var(--steel);stroke-width:3px;vector-effect:non-scaling-stroke;stroke-linecap:round}
+svg .tick{stroke:var(--muted);stroke-width:1px;vector-effect:non-scaling-stroke;opacity:.55}
+/* figures: limbs are a wide outline stroke under a narrower material stroke */
+svg .u{fill:none;stroke:var(--ol);stroke-linecap:round;stroke-linejoin:round}
+svg .m{fill:none;stroke-linecap:round;stroke-linejoin:round}
+svg .f{stroke:var(--ol);stroke-width:1;stroke-linejoin:round;stroke-linecap:round}
+.skin{fill:var(--skin);stroke:var(--skin)} .cloth{fill:var(--cloth);stroke:var(--cloth)} .hose{fill:var(--hose);stroke:var(--hose)}
+.steel{fill:var(--steel-hi);stroke:var(--steel-hi)} .leather{fill:var(--leather);stroke:var(--leather)}
+.mail{fill:url(#pMail);stroke:url(#pMail)} .quilt{fill:url(#pQuilt);stroke:url(#pQuilt)}
+.linen{fill:var(--linen);stroke:var(--linen)} .brass{fill:var(--brass);stroke:var(--brass)} .hair{fill:var(--hair)}
+.sur{fill:var(--accent)}
+
+/* items, soldiers, mustering */
+.item-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.item{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 12px 8px 8px;display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:center;min-width:0}
+.item.plain{grid-template-columns:minmax(0,1fr);padding-left:12px}
+.item svg{width:44px;height:44px;display:block}
+.item b{display:block}
+.item p{font-size:.92rem;color:var(--muted)}
+.sold-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.sold-grid .armor svg{max-height:290px}
+.sl{font-size:.92rem}
+.sl span{display:block;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.rule-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 24px}
+.rule{border-top:2px solid var(--ink);padding-top:8px;display:flex;flex-direction:column;gap:4px}
+.rule p{color:var(--muted)}
+.mount{background:var(--surface);border:1px solid var(--line);border-radius:6px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:8px 20px;align-items:center;padding:12px 18px 12px 12px}
+.mount svg{width:100%;height:auto;max-height:300px}
+.mount ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px}
+footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);padding-top:16px;max-width:75ch}
+
+@media (max-width:900px){
+  .armor-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .leg-grid,.item-grid,.rule-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .armor-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .leg-grid,.rack-grid{grid-template-columns:minmax(0,1fr)}
+  .shield-grid{grid-template-columns:minmax(0,1fr)}
+  .shield-grid .wpn{display:grid;grid-template-columns:110px minmax(0,1fr)}
+  .shield-grid .plate{border-bottom:0;border-right:1px solid var(--line);padding:6px;display:flex;align-items:center}
+  .shield-grid .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .wrap{gap:44px}
+  .item-grid,.rule-grid,.mount{grid-template-columns:minmax(0,1fr)}
+  .sold-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="pMail" width="4" height="3" patternUnits="userSpaceOnUse">
+      <rect width="4" height="3" style="fill:var(--steel)"/>
+      <path d="M0,1 a1,1.2 0 0 0 2,0 a1,1.2 0 0 0 2,0" style="fill:none;stroke:var(--ol);stroke-width:.45;opacity:.6"/>
+    </pattern>
+    <pattern id="pQuilt" width="5" height="5" patternUnits="userSpaceOnUse">
+      <rect width="5" height="5" style="fill:var(--linen)"/>
+      <path d="M2.5,0 V5" style="fill:none;stroke:var(--ol);stroke-width:.5;opacity:.45"/>
+    </pattern>
+    <clipPath id="cUp"><rect x="-60" y="-140" width="240" height="268"/></clipPath>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Greathelm playtest 0.3.0 · equipment and warriors compared</span>
+    <h1>The Armory</h1>
+    <p>Every armor, weapon, shield, item and model type in the playtest rules, drawn side by side with the rules that set them apart. Rules text is from the book. The book gives no measurements, so shapes and lengths follow typical historical examples.</p>
+  </header>
+
+  <section id="armor">
+    <div class="sec-head">
+      <span class="eyebrow">Worn on the body · one set per knight</span>
+      <h2>Armor</h2>
+      <p>Every armor rolls 1d6 on the armor table when its wearer is dealt damage. What changes is how many faces of the die pierce, and how much speed you get back for wearing less.</p>
+      <div class="legend">
+        <span><b class="chip P">P</b> Pierced: damage +1</span>
+        <span><b class="chip S">S</b> Struck: damage applied</span>
+        <span><b class="chip I">I</b> Impervious: no damage</span>
+      </div>
+    </div>
+    <div class="armor-grid" id="armorGrid"></div>
+
+    <div class="sub">
+      <div class="sub-head"><h3>Legendary heavy armors</h3><span>Campaign only, rolled on a d6. Each uses the heavy armor table and adds an effect when you roll Impervious.</span></div>
+      <div class="leg-grid" id="legGrid"></div>
+    </div>
+  </section>
+
+  <section id="weapons">
+    <div class="sec-head">
+      <span class="eyebrow">One-handed with a shield, or two-handed</span>
+      <h2>Weapons</h2>
+      <p>Every weapon on this page is drawn to the same scale, so lengths compare directly across racks; the ticks along the bottom edge are 10 cm apart, with a longer tick every 50 cm. Heavy melee deals 2 damage unless a weapon says otherwise.</p>
+      <div class="legend">
+        <span><b class="chip bonus">+1</b> bonus to the clash test</span>
+        <span><b class="chip lim">limit</b> works, but weaker</span>
+        <span><b class="chip bar">✕</b> not allowed</span>
+        <span>— no modifier</span>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-head"><h3>One-handed weapons</h3><span>Carried with a shield.</span></div>
+      <div class="rack-grid" id="oneGrid"></div>
+    </div>
+    <div class="sub">
+      <div class="sub-head"><h3>Shields</h3><span>Front view, all three at the same scale.</span></div>
+      <div class="shield-grid" id="shieldGrid"></div>
+    </div>
+    <div class="sub">
+      <div class="sub-head"><h3>Two-handed weapons</h3><span>No shield.</span></div>
+      <div class="rack-grid" id="twoGrid"></div>
+    </div>
+    <div class="sub">
+      <div class="sub-head"><h3>Two-handed ranged weapons</h3><span>One ranged attack per round, with a dagger for melee.</span></div>
+      <div class="rack-grid" id="rangedGrid"></div>
+    </div>
+    <div class="sub">
+      <div class="sub-head"><h3>Improvised weapons</h3><span>For peasants and other non-knight models. Knights may carry them, though they are worse.</span></div>
+      <div class="rack-grid" id="impGrid"></div>
+    </div>
+  </section>
+
+  <section id="items">
+    <div class="sec-head">
+      <span class="eyebrow">One item per knight · worth modelling on the miniature</span>
+      <h2>Items</h2>
+      <p>In quick battles only 2 of your 6 knights may take an item from the worn and use lists, and only 1 of 6 may take a consumable. Each list is rolled on the die shown, or picked.</p>
+    </div>
+    <div class="sub"><div class="sub-head"><h3>Rings</h3><span>Worn · d6</span></div><div class="item-grid" id="ringGrid"></div></div>
+    <div class="sub"><div class="sub-head"><h3>Amulets, belts and orles</h3><span>Worn · d3 each. An orle is the cloth wreath around the helm.</span></div><div class="item-grid" id="wornGrid"></div></div>
+    <div class="sub"><div class="sub-head"><h3>Use items</h3><span>d6</span></div><div class="item-grid" id="useGrid"></div></div>
+    <div class="sub"><div class="sub-head"><h3>Consumables</h3><span>Buffs, instants and tossed pots. A tossed pot needs a 25 mm marker.</span></div><div class="item-grid" id="consGrid"></div></div>
+    <div class="sub"><div class="sub-head"><h3>Legendary items</h3><span>Campaign only · worn d6, then use d6</span></div><div class="item-grid" id="legItemGrid"></div></div>
+    <div class="sub"><div class="sub-head"><h3>Upgrades</h3><span>Campaign only. They change dice, not the look of the model.</span></div><div class="item-grid" id="upGrid"></div></div>
+  </section>
+
+  <section id="muster">
+    <div class="sec-head">
+      <span class="eyebrow">Choosing and building your models</span>
+      <h2>Mustering your six</h2>
+      <p>The rules that decide which miniatures you can field and what has to be on them.</p>
+    </div>
+    <div class="rule-grid">
+      <div class="rule"><h3>Six a side</h3><p>A basic game uses 6 models each, from any 28–32 mm range, on 25 mm round bases. There are no points values.</p></div>
+      <div class="rule"><h3>What you see is what you get</h3><p>The weapons on the miniature are the weapons it uses in the game.</p></div>
+      <div class="rule"><h3>One loadout each</h3><p>A set of armor, then either a one-handed weapon, a shield and an item, or a two-handed weapon and an item.</p></div>
+      <div class="rule"><h3>Two weapons</h3><p>Two of the same weapon give +1 to parry defense; their abilities do not stack. With two different weapons, choose one each time you attack or defend. At most 2 dual-wielding models unless your opponent agrees to more.</p></div>
+      <div class="rule"><h3>One weapon, empty hand</h3><p>A knight with a single one-handed weapon and no shield gets +1 to the clash test on bash actions. Soldiers do not get this.</p></div>
+      <div class="rule"><h3>Full plate in quick play</h3><p>If both players agree, any heavily armored knight may count as having the full plate upgrade.</p></div>
+    </div>
+
+    <div class="sub">
+      <div class="sub-head"><h3>Soldiers</h3><span>Up to 4 of your 6 may be soldiers. They follow the knight rules with fixed gear, a lower damage limit than a knight’s 3, and one bonus each.</span></div>
+      <div class="sold-grid" id="soldGrid"></div>
+    </div>
+    <div class="sub">
+      <div class="sub-head"><h3>Mounted knight</h3><span>Drawn here with an arming sword and heater shield.</span></div>
+      <div class="mount" id="mount"></div>
+    </div>
+  </section>
+
+  <footer>Illustrations are schematic and made for this comparison; they are not artwork from the rulebook. The emblems on the legendary armors and the colors of the items are an interpretation of their names.</footer>
+</div>
+
+<script>
+/* ---------- tiny SVG helpers (weapon units are centimetres) ---------- */
+const P=(d,c)=>`<path d="${d}" class="o ${c}"/>`;
+const R=(x,y,w,h,c,rx=0)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" class="o ${c}"/>`;
+const C=(cx,cy,r,c)=>`<circle cx="${cx}" cy="${cy}" r="${r}" class="o ${c}"/>`;
+const L=(x1,y1,x2,y2,c='ln')=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="o ${c}"/>`;
+const haft=(x0,x1,h=2.4,c='wd')=>R(x0,-h/2,x1-x0,h,c,h/2);
+
+function sword({len,g0=6,g1,gw,bw,fuller=true,grip='lt'}){
+  const b=g1+1.8;
+  return P(`M${b},${-bw} L${len-11},${-bw*.62} L${len},0 L${len-11},${bw*.62} L${b},${bw}Z`,'sh')
+    +(fuller?L(b+3,0,len*.68,0,'ln thin'):'')
+    +R(g0,-1.3,g1-g0,2.6,grip,.8)+R(g1,-gw,1.8,gw*2,'st',.7)+C(g0-2.2,0,2.5,'br');
+}
+const axe=(x,s)=>P(`M${x-4*s},-1.2 L${x+4*s},-1.2 Q${x+6*s},${-7*s} ${x+8*s},${-12*s} Q${x},${-14.5*s} ${x-9*s},${-11*s} Q${x-4.5*s},${-6*s} ${x-4*s},-1.2Z`,'sh')
+  +L(x-7.4*s,-10.4*s,x+7.2*s,-10.6*s,'ln thin');
+const spearHead=(x,l=24)=>R(x-3,-1.7,7,3.4,'st',1)+P(`M${x+3},-1.2 L${x+8},-3.4 L${x+l},0 L${x+8},3.4 L${x+3},1.2Z`,'sh')+L(x+5,0,x+l-4,0,'ln thin');
+const chain=pts=>pts.map(([x,y])=>C(x,y,1.25,'ln')).join('');
+function spikes(cx,cy,r,n=8){let s='';for(let i=0;i<n;i++){const a=i*2*Math.PI/n,b=.28;
+  const p=(ang,rad)=>`${(cx+Math.cos(ang)*rad).toFixed(1)},${(cy+Math.sin(ang)*rad).toFixed(1)}`;
+  s+=P(`M${p(a-b,r)} L${p(a,r+3)} L${p(a+b,r)}Z`,'st');}return s+C(cx,cy,r,'st');}
+const dagger=(x,y,len=36)=>`<g transform="translate(${x} ${y})">`+P(`M9.6,-1.7 L${len-7},-1.1 L${len},0 L${len-7},1.1 L9.6,1.7Z`,'sh')+R(3,-1.1,5.6,2.2,'lt',.6)+R(8.4,-4,1.5,8,'st',.5)+C(1.6,0,1.6,'br')+`</g>`;
+const knife=(x,y)=>`<g transform="translate(${x} ${y})">`+P(`M11,-1.7 L27,-1.7 L33,.8 Q26,2.1 11,1.9Z`,'sh')+R(0,-1.5,11,3.1,'wd',1.2)+`</g>`;
+const arrow=(x,y,len=75)=>`<g transform="translate(${x} ${y})">`+L(0,0,len-4,0,'cord')+P(`M${len-5},-1.3 L${len},0 L${len-5},1.3Z`,'st')+P(`M2,0 L4,-2.2 L13,-2.2 L11,0 L13,2.2 L4,2.2Z`,'br')+`</g>`;
+const bow=(x0,x1,y,rise=20)=>{const mx=(x0+x1)/2,d=`M${x0},${y} Q${mx},${y-rise} ${x1},${y}`;
+  return `<path d="${d}" class="bow-u"/><path d="${d}" class="bow-w"/>`+L(x0,y,x1,y,'cord')+R(mx-5,y-rise/2-1.9,10,3.8,'lt',1.2);};
+
+function rackSvg(inner,W,H,label){
+  let t='';for(let x=0;x<=W;x+=10){const long=x%50===0;t+=`<line x1="${x}" x2="${x}" y1="${H/2-(long?4.5:2)}" y2="${H/2}" class="tick"/>`;}
+  return `<svg viewBox="-3 ${-H/2} ${W+6} ${H}" role="img" aria-label="${label}">${t}<g transform="translate(0 -1.5)">${inner}</g></svg>`;
+}
+
+/* ---------- weapon drawings ---------- */
+const ART={
+  armingSword:()=>sword({len:97,g1:16,gw:8.5,bw:2.5}),
+  handAx:()=>haft(4,64)+R(4,-1.2,11,2.4,'lt',1)+axe(54,1)+R(49,-1.7,10,3.4,'st',.8),
+  mace:()=>haft(4,56)+R(4,-1.3,12,2.6,'lt',1)+P('M53,-1.2 L56,-7.5 L63,-7.5 L67,-1.2Z','st')+P('M53,1.2 L56,7.5 L63,7.5 L67,1.2Z','st')+R(52,-2.6,16,5.2,'sh',2.4)+C(69.5,0,1.5,'st'),
+  falchion:()=>P('M18.8,-2.3 L72,-2.7 L85,-1 Q81,7.6 64,7.6 Q40,6 18.8,3Z','sh')+L(22,-.6,68,-.9,'ln thin')+R(6,-1.3,11,2.6,'lt',.8)+R(17,-6.5,1.8,13,'st',.7)+C(3.8,0,2.5,'br'),
+  warhammer:()=>haft(4,63)+R(4,-1.3,12,2.6,'lt',1)+P('M54,1.2 L60,1.2 L57,12.5Z','st')+R(54,-8,6.4,7,'st',.6)+R(52.6,-10.6,9.2,2.8,'sh',.6)+R(52.6,-1.8,9.2,3.6,'st',.6)+P('M61.8,-1.5 L72,0 L61.8,1.5Z','sh'),
+  flail:()=>haft(4,48)+R(4,-1.3,12,2.6,'lt',1)+R(46,-1.7,4,3.4,'st',.8)+chain([[51.5,.8],[54.2,2.2],[56.9,3.6],[59.6,4.8],[62.3,5.8]])+spikes(69,7,4.6),
+  shortSpear:()=>haft(4,140,2.2)+spearHead(140,24),
+  greatAx:()=>haft(4,154,2.6)+axe(138,1.75)+R(130,-1.9,17,3.8,'st',.8)+P('M133,1.9 L143,1.9 L138,6.5Z','st'),
+  longSword:()=>sword({len:137,g1:30,gw:12,bw:2.7}),
+  longSpear:()=>haft(4,230,2.2)+spearHead(230,26),
+  kriegsmesser:()=>P('M33.8,-2.5 L89,-3.1 Q103,-4.2 115,-8 Q111,1.6 95,3.1 L33.8,2.9Z','sh')+L(38,-1,91,-1.6,'ln thin')+R(6,-1.6,26,3.2,'wd',1)+C(13,0,.5,'dk')+C(20,0,.5,'dk')+C(27,0,.5,'dk')+R(32,-8.5,1.8,17,'st',.7)+R(3.4,-2.1,3.4,4.2,'st',1),
+  warmaul:()=>haft(4,140,2.8)+R(124,-12,16,24,'st',1.6)+L(124,-7,140,-7,'ln thin')+L(124,7,140,7,'ln thin')+R(122.5,-13.4,19,3,'sh',.8)+R(122.5,10.4,19,3,'sh',.8),
+  warFlail:()=>haft(4,122,2.6)+R(119,-1.9,5,3.8,'st',.8)+chain([[125.6,.8],[128.2,2],[130.8,3.2]])+`<g transform="rotate(16 132 4)">`+R(132,1.6,42,5,'wd',2)+R(138,1,3,6.2,'st',.6)+R(152,1,3,6.2,'st',.6)+R(166,1,3,6.2,'st',.6)+C(145.5,4.1,.9,'dk')+C(159.5,4.1,.9,'dk')+`</g>`,
+  polearm:()=>haft(4,206,2.6)+P('M185,1.2 L193,1.2 L191,6 Q187,12.5 180,11.5 Q185.5,8 185,1.2Z','st')+axe(189,1.3)+R(182,-1.8,24,3.6,'st',.8)+P('M205.5,-1.7 L227,0 L205.5,1.7Z','sh'),
+  bowDagger:()=>bow(4,186,-6,22)+dagger(4,17)+arrow(62,17),
+  crossbow:()=>R(4,-2.6,84,5.2,'wd',2)+`<path d="M70,-27 Q85,0 70,27" class="bow-u"/><path d="M70,-27 Q85,0 70,27" class="bow-s"/>`
+    +`<path d="M70,-27 L43,0 L70,27" class="cord"/>`+C(43,0,1.7,'st')+`<ellipse cx="92" cy="0" rx="6" ry="4.6" class="o ln"/>`
+    +L(45,0,82,0,'cord')+P('M81,-1.3 L86,0 L81,1.3Z','st')+dagger(118,-13)+arrow(118,8,38)+arrow(118,15,38),
+  huntingKnife:()=>knife(4,0),
+  woodAx:()=>haft(4,74,2.6)+P('M62,-1.2 L70,-1.2 L72,-11 L59,-10Z','sh')+R(61,-1.8,10,3.6,'st',.6),
+  club:()=>P('M4,-1.3 L48,-2.2 Q70,-5.2 75,0 Q70,5.2 48,2.4 L4,1.3Z','wd')+C(58,-1,.9,'ln thin')+C(65,1.4,1.2,'ln thin')+L(8,-1.2,8,1.2,'ln thin')+L(11,-1.3,11,1.3,'ln thin'),
+  spikedClub:()=>[52,58,64].map(x=>P(`M${x-1.6},-3 L${x},-8 L${x+1.6},-3Z`,'st')+P(`M${x-1.6},3 L${x},8 L${x+1.6},3Z`,'st')).join('')+P('M72,-1.4 L79,0 L72,1.4Z','st')+P('M4,-1.3 L46,-2.2 Q68,-5.2 74,0 Q68,5.2 46,2.4 L4,1.3Z','wd')+R(47,-2.9,2.2,5.8,'st',.5)+C(55,0,.8,'dk')+C(61,0,.8,'dk')+C(67,0,.8,'dk')+R(4,-1.4,12,2.8,'lt',1),
+  handWeapon:()=>sword({len:72,g1:15,gw:6,bw:2.6,fuller:false}),
+  farmTools:()=>haft(4,142,2.4)+R(148,-7.4,2.4,14.8,'st',.6)+R(149,-7.4,25,1.9,'sh',.9)+R(149,-.95,25,1.9,'sh',.9)+R(149,5.5,25,1.9,'sh',.9)+R(138,-1.9,11,3.8,'st',1),
+  woodFlail:()=>haft(4,112,2.6)+`<path d="M112,0 Q116,4 120,3.4" class="cord"/>`+`<g transform="rotate(14 120 3)">`+R(120,.8,44,4.6,'wd',2.2)+`</g>`,
+  staff:()=>haft(4,186,2.8)+L(60,-1.4,60,1.4,'ln thin')+L(126,-1.4,126,1.4,'ln thin'),
+  slingKnife:()=>`<path d="M4,-3 Q34,-13 58,-3 M4,3 Q34,-6 58,2" class="cord"/>`+`<ellipse cx="62" cy="-1" rx="6" ry="3.4" class="o lt"/>`+C(62,-1.4,2,'st')+C(4,-3,1.2,'ln')+knife(96,2),
+  bowKnife:()=>bow(4,156,-6,20)+knife(4,17)+arrow(62,17),
+};
+
+/* ---------- weapon data (rules text from playtest 0.3.0) ---------- */
+const B=v=>[v,'bonus'], N=['—','none'], X=['✕','bar'], LIM=v=>[v,'lim'];
+const melee=(l,h,p,r)=>[['Light',l],['Heavy',h],['Parry',p],['Riposte',r]];
+const ONE=[
+  {n:'Arming Sword',len:'≈ 95 cm',a:'armingSword',s:melee(B('+1'),N,N,N),fx:''},
+  {n:'Hand Ax',len:'≈ 60 cm',a:'handAx',s:melee(N,B('+1'),N,X),fx:''},
+  {n:'Mace',len:'≈ 65 cm',a:'mace',s:melee(N,N,N,X),fx:'Successful light melee attacks may move the defender up to 1″.'},
+  {n:'Falchion',len:'≈ 80 cm',a:'falchion',s:melee(N,N,N,N),fx:'Successful light melee attacks remove 2 momentum from the defender.'},
+  {n:'Warhammer',len:'≈ 70 cm',a:'warhammer',s:melee(N,N,N,X),fx:'Successful heavy melee attacks may move the defender up to 1″.'},
+  {n:'Flail',len:'≈ 75 cm',a:'flail',s:melee(B('+1'),N,X,X),fx:'The defender cannot use the riposte defense.'},
+  {n:'Short Spear',len:'≈ 165 cm',a:'shortSpear',s:melee(N,N,LIM('1 mom.'),X),fx:'Counts as an allied knight during a clash test when in base contact with the attacker.'},
+  {n:'Spiked Club',len:'not in the rules',a:'spikedClub',s:melee(N,N,N,X),fx:'Not listed in the playtest. Suggested: play it as a Mace, whose rules are shown here. A crude peasant version fits the improvised Club instead.'},
+];
+const TWO=[
+  {n:'Great Ax',len:'≈ 155 cm',a:'greatAx',s:melee(N,B('+1'),N,X),fx:'Defenders without momentum cannot gain the block defense bonus.'},
+  {n:'Long Sword',len:'≈ 135 cm',a:'longSword',s:melee(B('+1'),N,N,B('+1')),fx:''},
+  {n:'Long Spear',len:'≈ 255 cm',a:'longSpear',s:melee(B('+1'),N,LIM('1 mom.'),X),fx:'Counts as an allied knight during a clash test when in base contact with the attacker or defender.'},
+  {n:'Kriegsmesser',len:'≈ 115 cm',a:'kriegsmesser',s:melee(N,B('+1'),N,N),fx:'Successful heavy melee attacks remove 2 momentum from the defender.'},
+  {n:'Warmaul',len:'≈ 140 cm',a:'warmaul',s:melee(N,B('+1'),N,X),fx:'Successful light and heavy melee attacks may move the defender up to 2″.'},
+  {n:'War Flail',len:'≈ 175 cm',a:'warFlail',s:melee(B('+1'),B('+1'),LIM('1 mom.'),X),fx:'The defender cannot use the riposte defense.'},
+  {n:'Polearm',len:'≈ 225 cm',a:'polearm',s:melee(N,B('+1'),LIM('1 mom.'),X),fx:'Counts as an allied knight during a clash test when in base contact with the attacker or defender.'},
+];
+const RANGED=[
+  {n:'Bow & Dagger',len:'bow ≈ 180 cm',a:'bowDagger',s:[['Ranged',B('Light')],['Loading',N],['Parry',N],['Riposte',X]],fx:'Gains the light ranged attack.'},
+  {n:'Crossbow & Dagger',len:'≈ 90 cm',a:'crossbow',s:[['Ranged',B('Heavy')],['Loading',LIM('Complex')],['Parry',N],['Riposte',X]],fx:'Gains the heavy ranged attack. Complex weapon.'},
+];
+const IMP=[
+  {n:'Hunting Knife',len:'one-handed',a:'huntingKnife',W:170,s:melee(B('+1'),LIM('1 dmg'),N,X),fx:''},
+  {n:'Woodman’s Ax',len:'one-handed',a:'woodAx',W:170,s:melee(N,LIM('+1 · 1 dmg'),N,X),fx:''},
+  {n:'Club',len:'one-handed',a:'club',W:170,s:melee(N,LIM('1 dmg'),N,X),fx:'Successful light melee attacks may move the defender up to 1″.'},
+  {n:'Hand Weapon',len:'one-handed',a:'handWeapon',W:170,s:melee(B('+1'),LIM('1 dmg'),N,N),fx:''},
+  {n:'Farm Tools',len:'two-handed',a:'farmTools',W:260,s:melee(B('+1'),LIM('1 dmg'),LIM('1 mom.'),X),fx:'Counts as an allied knight during a clash test when in base contact with the attacker or defender.'},
+  {n:'Wooden Flail',len:'two-handed',a:'woodFlail',W:260,s:melee(N,B('+1'),LIM('1 mom.'),X),fx:'The defender cannot use the riposte defense.'},
+  {n:'Wooden Staff',len:'two-handed',a:'staff',W:260,s:melee(B('+1'),LIM('1 dmg'),N,X),fx:''},
+  {n:'Sling & Knife',len:'ranged',a:'slingKnife',W:190,H:44,s:[['Ranged',B('Light')],['Heavy',LIM('1 dmg')],['Parry',N],['Riposte',X]],fx:'Gains the light ranged attack.'},
+  {n:'Bow & Knife',len:'ranged',a:'bowKnife',W:190,H:64,s:[['Ranged',B('Light')],['Heavy',LIM('1 dmg')],['Parry',N],['Riposte',X]],fx:'Gains the light ranged attack.'},
+];
+
+const statHtml=s=>`<div class="stats">${s.map(([k,[v,c]])=>`<div><span>${k}</span><b class="chip ${c}">${v}</b></div>`).join('')}</div>`;
+function fillRack(id,list,W,H){
+  document.getElementById(id).innerHTML=list.map(w=>`<article class="wpn">
+    <div class="plate">${rackSvg(ART[w.a](),260,w.H||H,w.n)}</div>
+    <div class="info"><div class="top"><h3>${w.n}</h3><small>${w.len}</small></div>${statHtml(w.s)}<p class="fx">${w.fx}</p></div>
+  </article>`).join('');
+}
+fillRack('oneGrid',ONE,170,40);
+fillRack('twoGrid',TWO,260,48);
+fillRack('rangedGrid',RANGED,190,64);
+fillRack('impGrid',IMP,170,40);
+
+/* ---------- shields (front view, cm) ---------- */
+const SHIELDS=[
+  {n:'Buckler',len:'≈ 35 cm',svg:C(0,0,17.5,'st')+C(0,0,14.5,'ln thin')+C(0,0,6.5,'sh')+C(0,0,1.2,'dk'),
+   s:[['Block',B('+1')],['Vs ranged',N],['Bash',B('+1')],['Momentum',N]],fx:''},
+  {n:'Heater Shield',len:'≈ 60 × 75 cm',svg:`<path d="M-30,-37 L30,-37 L30,-6 C30,18 12,32 0,39 C-12,32 -30,18 -30,-6Z" class="o sur"/>`
+     +P('M-30,-12 L0,-30 L30,-12 L30,0 L0,-18 L-30,0Z','br'),
+   s:[['Block',B('+2')],['Vs ranged',N],['Bash',N],['Momentum',N]],fx:''},
+  {n:'Kite Shield',len:'≈ 55 × 110 cm',svg:`<path d="M0,-55 C22,-55 28,-42 28,-28 C28,6 10,40 0,57 C-10,40 -28,6 -28,-28 C-28,-42 -22,-55 0,-55Z" class="o sur"/>`
+     +R(-2.2,-54,4.4,96,'br')+R(-27,-30,54,4.4,'br')+C(0,-28,6,'sh')+C(0,-28,1.2,'dk'),
+   s:[['Block',B('+2')],['Vs ranged',B('+3')],['Bash',N],['Momentum',LIM('limit 2')]],fx:'The carrier’s momentum limit is decreased to 2.'},
+];
+document.getElementById('shieldGrid').innerHTML=SHIELDS.map(w=>`<article class="wpn">
+  <div class="plate"><svg viewBox="-36 -60 72 122" role="img" aria-label="${w.n}">${w.svg}</svg></div>
+  <div class="info"><div class="top"><h3>${w.n}</h3><small>${w.len}</small></div>${statHtml(w.s)}<p class="fx">${w.fx}</p></div>
+</article>`).join('');
+
+/* ---------- armor figures ---------- */
+const limb=(pts,w,c)=>`<polyline points="${pts}" class="u" stroke-width="${w+2}"/><polyline points="${pts}" class="m ${c}" stroke-width="${w}"/>`;
+const F=(tag,attrs,c)=>`<${tag} ${attrs} class="f ${c}"/>`;
+const garment=(len,c)=>{const k=(len-98)*.19;return F('path',`d="M33,40 Q50,36 67,40 L64,72 L${65+k},${len} L${35-k},${len} L36,72Z"`,c);};
+const ARM_L='30,46 23,74 21,99', ARM_R='70,46 77,74 79,99', LEG_L='43,102 42,146 41,188', LEG_R='57,102 58,146 59,188';
+const bothArms=c=>limb(ARM_L,9,c)+limb(ARM_R,9,c), bothLegs=c=>limb(LEG_L,12,c)+limb(LEG_R,12,c);
+const hands=c=>F('circle','cx="21" cy="103" r="5"',c)+F('circle','cx="79" cy="103" r="5"',c);
+const feet=c=>F('ellipse','cx="38" cy="196" rx="9" ry="4.5"',c)+F('ellipse','cx="62" cy="196" rx="9" ry="4.5"',c);
+const boots=c=>limb('41.6,168 41,188',12,c)+limb('58.4,168 59,188',12,c);
+const bareHead=()=>F('rect','x="46" y="30" width="8" height="9"','skin')+F('ellipse','cx="50" cy="22" rx="9.5" ry="11.5"','skin')
+  +`<path d="M40.4,21 Q40,9 50,9 Q60,9 59.6,21 Q55,14.5 50,14.5 Q45,14.5 40.4,21Z" class="f hair"/><circle cx="46" cy="24" r=".9" class="dk"/><circle cx="54" cy="24" r=".9" class="dk"/>`;
+const belt=y=>`<line x1="36.4" y1="${y}" x2="63.6" y2="${y}" class="u" stroke-width="5" style="stroke-linecap:butt"/><line x1="36.4" y1="${y}" x2="63.6" y2="${y}" class="m leather" stroke-width="3" style="stroke-linecap:butt"/>`+F('rect',`x="48" y="${y-2.2}" width="4" height="4.4"`,'brass');
+const greatHelm=()=>F('path','d="M39,6 L61,6 L62,34 Q50,38.5 38,34Z"','steel')+F('rect','x="38.6" y="14.4" width="22.8" height="4.6"','brass')+F('rect','x="48.6" y="6" width="2.8" height="30"','brass')
+  +`<rect x="41" y="15.9" width="6.6" height="1.6" class="dk"/><rect x="52.4" y="15.9" width="6.6" height="1.6" class="dk"/>`
+  +[[54.5,24],[57.5,24],[54.5,27.5],[57.5,27.5],[54.5,31],[57.5,31]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r=".8" class="dk"/>`).join('');
+
+function heavyKnight(sur='sur',emblem,extra='',surStyle=''){
+  const e=emblem??(F('rect','x="48" y="50" width="4" height="28"','linen')+F('rect','x="40.5" y="58" width="19" height="4"','linen'));
+  return bothLegs('mail')+feet('mail')
+    +`<path d="M33,40 Q50,36 67,40 L64,72 L${65+12.7},165 L${35-12.7},165 L36,72Z" class="f ${sur}" style="${surStyle}"/>`
+    +`<line x1="50" y1="112" x2="50" y2="165" class="f"/>`+belt(92)+e+bothArms('mail')+hands('mail')
+    +F('path','d="M37,33 Q50,41 63,33 L67,42 Q50,48 33,42Z"','mail')+greatHelm()+extra;
+}
+const FIG={
+  nude:()=>bothLegs('skin')+feet('skin')+F('path','d="M33,40 Q50,36 67,40 L64,72 L65,100 L35,100 L36,72Z"','skin')
+    +F('path','d="M35.4,90 L64.6,90 L66,108 L52,104 L50,112 L48,104 L34,108Z"','linen')+bothArms('skin')+hands('skin')+bareHead(),
+  clothing:()=>bothLegs('hose')+feet('leather')+garment(128,'cloth')+belt(90)+bothArms('cloth')+hands('skin')+bareHead()
+    +`<path d="M44,39 L50,47 L56,39" class="f ln" fill="none"/>`,
+  light:()=>bothLegs('hose')+boots('leather')+feet('leather')+garment(134,'quilt')+belt(90)+bothArms('quilt')+hands('skin')+bareHead()
+    +F('path','d="M41,16.5 Q41,5 50,5 Q59,5 59,16.5Z"','steel')+F('ellipse','cx="50" cy="16.5" rx="15.5" ry="3.2"','steel'),
+  medium:()=>bothLegs('hose')+boots('leather')+feet('leather')+garment(154,'quilt')+garment(146,'mail')+belt(90)+bothArms('mail')+hands('leather')
+    +F('rect','x="46" y="30" width="8" height="9"','mail')+F('ellipse','cx="50" cy="22" rx="11" ry="13"','mail')+F('ellipse','cx="50" cy="24.5" rx="6.2" ry="7.2"','skin')
+    +`<circle cx="46.6" cy="23.5" r=".9" class="dk"/><circle cx="53.4" cy="23.5" r=".9" class="dk"/>`
+    +F('path','d="M37,32 Q50,42 63,32 L67,42 Q50,49 33,42Z"','mail')
+    +F('path','d="M39.4,17.5 Q41,3.5 50,3 Q59,3.5 60.6,17.5Z"','steel')+F('rect','x="48.7" y="16.5" width="2.6" height="10"','steel'),
+  heavy:()=>heavyKnight(),
+  plate:()=>bothLegs('steel')+feet('steel')+F('circle','cx="42" cy="146" r="7"','steel')+F('circle','cx="58" cy="146" r="7"','steel')
+    +F('path','d="M33,40 Q50,36 67,40 L63.5,74 L66,100 L34,100 L36.5,74Z"','steel')
+    +`<path d="M50,42 V78 M36.6,80 Q50,85 63.4,80 M35.8,87 Q50,92 64.2,87 M35,94 Q50,99 65,94" class="f" fill="none"/>`
+    +F('path','d="M34.5,100 L49,100 L47.5,120 L37,117Z"','steel')+F('path','d="M65.5,100 L51,100 L52.5,120 L63,117Z"','steel')
+    +bothArms('steel')+F('circle','cx="23" cy="74" r="5.6"','steel')+F('circle','cx="77" cy="74" r="5.6"','steel')+hands('steel')
+    +F('ellipse','cx="30" cy="45.5" rx="9" ry="6.8"','steel')+F('ellipse','cx="70" cy="45.5" rx="9" ry="6.8"','steel')
+    +F('path','d="M40.5,33 Q50,40 59.5,33 L62,41 Q50,46.5 38,41Z"','steel')
+    +F('path','d="M40,22 Q40,4.5 50,4.5 Q60,4.5 60,22 L58,33.5 Q50,37.5 42,33.5Z"','steel')
+    +`<path d="M40.6,19 L50,25.5 L59.4,19" class="f" fill="none"/><rect x="42.5" y="15.4" width="15" height="1.5" class="dk"/>`
+    +[[45,28],[47.5,29.6],[52.5,29.6],[55,28]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r=".7" class="dk"/>`).join(''),
+};
+const ARMOR=[
+  {k:'nude',n:'Naked',src:'No armor list',t:'PPPPPI',dodge:'+3',move:'+2″'},
+  {k:'clothing',n:'Clothing',src:'No armor list',t:'PPPPSI',dodge:'+2',move:'+2″'},
+  {k:'light',n:'Light Armor',src:'Armor list',t:'PPPSSI',dodge:'+2',move:'+1″'},
+  {k:'medium',n:'Medium Armor',src:'Armor list',t:'PPSSSI',dodge:'+1',move:'—'},
+  {k:'heavy',n:'Heavy Armor',src:'Armor list',t:'PSSSSI',dodge:'—',move:'—'},
+  {k:'plate',n:'Full Plate',src:'Heavy upgrade',t:'PSSSII',dodge:'—',move:'—'},
+];
+document.getElementById('armorGrid').innerHTML=ARMOR.map(a=>`<article class="armor">
+  <span class="src">${a.src}</span>
+  <svg viewBox="4 0 92 204" role="img" aria-label="${a.n}">${FIG[a.k]()}</svg>
+  <h3>${a.n}</h3>
+  <div class="dice" aria-label="Armor table, d6 results 1 to 6">${[...a.t].map((c,i)=>`<b class="${c}">${i+1}<i>${c}</i></b>`).join('')}</div>
+  <dl class="kv"><dt>Dodge defense</dt><dd>${a.dodge}</dd><dt>Run, walk, step</dt><dd>${a.move}</dd></dl>
+</article>`).join('');
+
+/* ---------- legendary armors: heavy armor with a distinct surcoat and emblem ---------- */
+const E=(inner)=>inner, W8='style="fill:#f1ede2"';
+const star=(cx,cy,R1,R2,n)=>{let d='';for(let i=0;i<n*2;i++){const a=i*Math.PI/n-Math.PI/2,r=i%2?R2:R1;d+=(i?'L':'M')+(cx+Math.cos(a)*r).toFixed(1)+','+(cy+Math.sin(a)*r).toFixed(1);}return d+'Z';};
+const LEG=[
+  {n:'Armor of Dread',c:'#2b2530',fx:'The attacker immediately takes a courage test.',
+   em:`<path d="M43,60 a7,7 0 1 1 14,0 v4 h-3 v5 h-8 v-5 h-3Z" class="f" ${W8}/><circle cx="47.2" cy="60" r="1.6" class="dk"/><circle cx="52.8" cy="60" r="1.6" class="dk"/>`,
+   ex:F('path','d="M39.4,10 Q29,8 29,-3 Q33,5 40,5.6Z"','linen')+F('path','d="M60.6,10 Q71,8 71,-3 Q67,5 60,5.6Z"','linen')},
+  {n:'Armor of the Lion',c:'#c2902a',fx:'You may immediately perform the battle cry action.',
+   em:`<path d="${star(50,62,9.5,6.6,10)}" class="f" style="fill:#8c2a22"/><circle cx="50" cy="62" r="4.6" class="f" style="fill:#e3b548"/><circle cx="48.3" cy="61.2" r=".7" class="dk"/><circle cx="51.7" cy="61.2" r=".7" class="dk"/>`,
+   ex:`<path d="M50,6 Q46,-5 56,-4 Q63,-3 66,4 Q58,0 55,6Z" class="f" style="fill:#8c2a22"/>`},
+  {n:'Armor of the River',c:'#2c6b9c',fx:'You may immediately redistribute up to 3 momentum from enemy knights within 3″.',
+   em:[54,61,68].map(y=>`<path d="M40,${y} q2.5,-3.4 5,0 t5,0 t5,0 t5,0" fill="none" style="stroke:#f1ede2;stroke-width:1.8;stroke-linecap:round"/>`).join(''),ex:''},
+  {n:'Armor of Alethea',c:'#ebe5d3',fx:'Immediately remove up to 3 gruesome death markers within 3″.',
+   em:`<path d="${star(50,62,10,3.8,8)}" class="f brass"/>`,
+   ex:`<circle cx="50" cy="19" r="19.5" fill="none" style="stroke:var(--brass);stroke-width:1.8"/>`,exBehind:true},
+  {n:'Armor of the Mountain',c:'#5c6c5a',fx:'Immediately remove 1 damage from yourself.',
+   em:`<path d="M39,70 L46,56 L50,63 L55,52 L61,70Z" class="f" ${W8}/><path d="M52.6,57 L55,52 L57.2,58.4 L55,57 Z" class="dk"/>`,ex:''},
+  {n:'Armor of Blades',c:'#8a2626',fx:'The attacker is immediately dealt 1 damage and rolls on the armor table.',
+   em:`<path d="M42,53 L58,71 M58,53 L42,71" fill="none" style="stroke:#f1ede2;stroke-width:2.2;stroke-linecap:round"/><path d="M43.6,66 L47.8,62.4 M56.4,66 L52.2,62.4" fill="none" style="stroke:var(--brass);stroke-width:2;stroke-linecap:round"/>`,
+   ex:F('path','d="M24,44 L21,31 L30,39Z"','steel')+F('path','d="M76,44 L79,31 L70,39Z"','steel')+F('path','d="M29,40 L30,27 L36,38Z"','steel')+F('path','d="M71,40 L70,27 L64,38Z"','steel')},
+];
+document.getElementById('legGrid').innerHTML=LEG.map((a,i)=>`<article class="leg">
+  <svg viewBox="12 -6 76 96" role="img" aria-label="${a.n}">${a.exBehind?a.ex:''}${heavyKnight('',a.em,a.exBehind?'':a.ex,'fill:'+a.c)}</svg>
+  <div><h3>${i+1}. ${a.n}</h3><p class="when">On Impervious</p><p>${a.fx}</p></div>
+</article>`).join('');
+/* ---------- items ---------- */
+const Pc=(d,col)=>`<path d="${d}" class="o" style="fill:${col}"/>`;
+const Rc=(x,y,w,h,col,rx=0)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" class="o" style="fill:${col}"/>`;
+const Cc=(cx,cy,r,col)=>`<circle cx="${cx}" cy="${cy}" r="${r}" class="o" style="fill:${col}"/>`;
+const HOLE='var(--surface)', BONE='#f1ede2';
+const ICON={
+  ring:c=>C(20,25,10,'br')+Cc(20,25,6.4,HOLE)+Pc('M14.5,13 L20,6 L25.5,13 L20,18Z',c),
+  amulet:c=>`<path d="M7,5 Q20,27 33,5" class="cord"/>`+C(20,26,8,'br')+Cc(20,26,4.6,c),
+  belt:c=>Rc(3,15,34,9,c,2)+R(15,12.5,10,14,'br',1.5)+Rc(17.6,15.2,4.8,8.6,HOLE,.6)+C(30,19.5,.8,'dk')+C(8,19.5,.8,'dk'),
+  orle:(c,c2)=>`<ellipse cx="20" cy="20" rx="16" ry="9.5" class="o" style="fill:${c}"/><ellipse cx="20" cy="20" rx="8" ry="3.4" class="o" style="fill:${HOLE}"/>`
+    +[[6,17,9,24],[11,13,15,17.4],[17.5,11,20,16.6],[24,11.2,24.6,17],[30,13.6,28,18.6],[34,18,29.4,22],[13,23.4,10.5,28],[20,23.4,20,29.5],[27,23.2,29.5,27.8]].map(([a,b,c3,d])=>`<line x1="${a}" y1="${b}" x2="${c3}" y2="${d}" class="o" style="stroke:${c2||'var(--ol)'}"/>`).join(''),
+  banner:()=>`<path d="M10,6 L34,6 L29,13.5 L34,21 L10,21Z" class="o sur"/>`+R(7.5,3,2.6,34,'wd',1.2)+C(8.8,3,1.8,'br'),
+  throwingAx:()=>`<g transform="translate(5 33) rotate(-42) scale(.52)">${ART.handAx()}</g>`,
+  scroll:()=>Rc(9,9,22,22,'var(--linen)',1)+Rc(6,6.5,28,4.6,'var(--linen)',2.3)+Rc(6,29,28,4.6,'var(--linen)',2.3)+L(13,16,27,16,'ln thin')+L(13,20,27,20,'ln thin')+L(13,24,22,24,'ln thin'),
+  relic:()=>R(9,17,22,16,'br',1)+P('M7,17 L20,6 L33,17Z','br')+Rc(18.6,20,2.8,10,BONE)+Rc(15.5,22.6,9,2.8,BONE),
+  horn:()=>Pc('M5,12 Q6,31 29,32 L35,24 Q17,25 12,10Z',BONE)+R(27.4,22.6,3,10.6,'br',1)+P('M4.4,13 L12.6,9.6 L11.6,7.4 L4,10.4Z','br'),
+  hanky:()=>Pc('M7,10 Q20,5 33,10 L31,31 Q25,26 20,33 Q14,26 9,31Z',BONE)+`<path d="M11,12.5 Q20,8.5 29,12.5" class="o" style="fill:none;stroke:var(--pierced)"/>`+Cc(26,26,1.4,'var(--pierced)'),
+  vial:c=>R(17,4,6,5.4,'wd',1)+Pc('M16.4,9.4 L23.6,9.4 L23.6,16 Q31,20 31,27 Q31,35.5 20,35.5 Q9,35.5 9,27 Q9,20 16.4,16Z',c),
+  herb:()=>`<path d="M20,36 Q20,22 20,10" class="o ln"/>`+Pc('M20,12 Q12,8 10,2 Q19,2 20,12Z','#5f8f4e')+Pc('M20,20 Q29,17 32,10 Q22,10 20,20Z','#5f8f4e')+Pc('M20,27 Q11,25 7,18 Q17,17 20,27Z','#5f8f4e'),
+  bottle:c=>R(16.4,3,7.2,4.6,'wd',1)+R(17,7.6,6,6,'sh')+Rc(11,13.6,18,22,c,3)+Rc(13.4,20,13.2,8,BONE,.8),
+  pot:(c,top)=>Cc(20,25,11,'#a8623c')+R(14,11.4,12,4.6,'lt',1.4)+`<path d="M20,11 Q21,6 25,4.6" class="cord"/>`+Cc(26,4.6,2.6,c)+L(11.4,22,28.6,22,'ln thin'),
+  mirror:()=>R(18.4,24,3.2,13,'br',1.2)+C(20,15,11.4,'br')+Cc(20,15,8.4,'#2b2530'),
+  tear:()=>Pc('M20,4 Q31,20 31,26 Q31,36 20,36 Q9,36 9,26 Q9,20 20,4Z','#8cc3e6'),
+};
+const item=(icon,n,fx)=>`<article class="item${icon?'':' plain'}">${icon?`<svg viewBox="0 0 40 40" aria-hidden="true">${icon}</svg>`:''}<div><b>${n}</b><p>${fx}</p></div></article>`;
+const putItems=(id,rows)=>document.getElementById(id).innerHTML=rows.map(r=>item(...r)).join('');
+putItems('ringGrid',[
+  [ICON.ring('#2f62b8'),'Sapphire Ring','+1 to light ranged and melee attack.'],
+  [ICON.ring('#b62a32'),'Ruby Ring','+1 to heavy ranged and melee attack.'],
+  [ICON.ring('#23222a'),'Jet Ring','+1 to courage test.'],
+  [ICON.ring('#e2b93a'),'Citrine Ring','+1 to parry defense.'],
+  [ICON.ring('#8a55b8'),'Amethyst Ring','+1 to dodge defense.'],
+  [ICON.ring('#e5702e'),'Fire Opal Ring','+1 to riposte defense.'],
+]);
+putItems('wornGrid',[
+  [ICON.amulet('#a9c94a'),'Peridot Amulet','Hazard table rolls of 3–6 regain your footing.'],
+  [ICON.amulet('#2f9a62'),'Emerald Amulet','Armor table rolls of 3–6 count as Impervious against ranged attacks.'],
+  [ICON.amulet('#dfe6ee'),'Moonstone Amulet','Armor table rolls of 3–6 count as Impervious against elevation damage.'],
+  [ICON.belt('#7a5539'),'Sturdy Belt','+1 to clash test when outnumbered.'],
+  [ICON.belt('#4b3a2e'),'Aged Belt','The bash action only removes 1 momentum from you.'],
+  [ICON.belt('#a8402e'),'Fine Belt','The bash action only moves you 2″.'],
+  [ICON.orle(BONE),'White Orle','When you pass a courage test, all allied knights within 1″ automatically pass theirs.'],
+  [ICON.orle('#b8392f','#e2b93a'),'Colorful Orle','When you pass a courage test, immediately distribute 3 momentum within 3″.'],
+  [ICON.orle('#2b2530','#8a8f99'),'Black Orle','When you pass a courage test, the nearest enemy knight within 1″ immediately takes one.'],
+]);
+putItems('useGrid',[
+  [ICON.banner(),'Banner','An ally within 3″ may immediately perform an encircle move action.'],
+  [ICON.throwingAx(),'Throwing Ax','Remove 2 momentum from an enemy knight within 3″ and in line of sight.'],
+  [ICON.scroll(),'Battlefield Orders','An ally within 3″ may immediately perform a lunge move action.'],
+  [ICON.relic(),'Relic','Remove 1 ally gruesomely slain marker within 3″.'],
+  [ICON.horn(),'Horn','Redistribute 3 momentum within 6″.'],
+  [ICON.hanky(),'Lover’s Handkerchief','You gain 3 momentum.'],
+]);
+putItems('consGrid',[
+  [ICON.vial('#ead9a0'),'Jasmin Oils','Buff: +2 on your next clash test.'],
+  [ICON.vial('#d9788c'),'Rose Oils','Buff: +2 on your next courage test.'],
+  [ICON.vial('#9a86c9'),'Lavender Oils','Buff: +2 on your next dodge defense.'],
+  [ICON.herb(),'Healing Herb','Instant: remove 1 damage and gain 2 momentum.'],
+  [ICON.bottle('#7d2f3a'),'Medicinal Tincture','Instant: remove 2 damage.'],
+  [ICON.bottle('#3f7f8c'),'Alacrity Tincture','Instant: perform either an engage or encircle move action.'],
+  [ICON.pot('#e5702e'),'Fire Powder Pot','Throw up to 6″. Knights touching the fire marker must perform a shift move action.'],
+  [ICON.pot('#8a8f99'),'Smoke Powder Pot','Throw up to 3″. Knights touching the smoke marker cannot make light or heavy melee attacks.'],
+  [ICON.pot('#f2dc5a'),'Flash Powder Pot','Throw up to 3″. Knights touching the flash marker immediately lose all momentum.'],
+]);
+putItems('legItemGrid',[
+  [ICON.ring('#c9c2a8'),'Ancient Ring','Worn: momentum limit is increased by 1.'],
+  [ICON.amulet('#f1ede2'),'Amulet of Alethea','Worn: re-roll allied gruesome death results within 3″.'],
+  [ICON.amulet('#6f8fb0'),'Amulet of Protection','Worn: armor table rolls of 5–6 count as Impervious.'],
+  [ICON.belt('#8a6a2a'),'Belt of Strength','Worn: enemies cannot gain an outnumber bonus against you.'],
+  [ICON.orle('#3a2030','#b62a32'),'Orle of Dread','Worn: when you pass a courage test, 2 enemy knights within 1″ immediately take one.'],
+  [ICON.orle('#f3e7a8','#c79a34'),'Orle of Light','Worn: when you pass a courage test, you or an ally within 3″ may immediately perform the item action.'],
+  [ICON.banner(),'Ornate Banner','Use: 2 allied knights within 3″ may immediately perform an engage move action.'],
+  [ICON.mirror(),'Dark Mirror','Use: remove up to 3 momentum from 2 enemy knights within 3″ and in line of sight.'],
+  [ICON.scroll(),'Holy Text','Use: 2 enemy knights within 3″ immediately perform a shift move action.'],
+  [ICON.relic(),'Ancient Artifact','Use: remove 2 gruesomely slain markers within 6″.'],
+  [ICON.tear(),'Tear of Alethea','Use: remove up to 2 damage from allied knights within 3″.'],
+  [ICON.horn(),'Swan Horn','Use: redistribute d3+3 momentum within 6″.'],
+]);
+putItems('upGrid',[
+  ['','Balanced Light (weapon)','Re-roll results of 1 in clash tests when performing a light melee attack.'],
+  ['','Balanced Heavy (weapon)','Re-roll results of 1 in clash tests when performing a heavy melee attack.'],
+  ['','Polished (weapon)','Re-roll results of 1 in clash tests when defending with a riposte.'],
+  ['','Stonewashed (weapon)','Re-roll results of 1 in clash tests when defending with a parry.'],
+  ['','Heat Treatment (weapon)','If the clash test results in a fumbled clash, the test ends and you win.'],
+  ['','Tempered (weapon)','If the clash test results in a perfect clash, the test ends and you win.'],
+  ['','Reinforced (shield)','Re-roll results of 1 in clash tests when defending with a block.'],
+  ['','Improved Enarmes (shield)','Re-roll results of 1 in clash tests when performing the bash action.'],
+  ['','Full Plate (heavy armor)','Armor table rolls of 5 count as Impervious. Drawn in the armor line-up above.'],
+]);
+
+/* ---------- soldiers: armor figure + held weapon, same scale as the weapon racks ---------- */
+const held=(art,grip,up=true)=>`<g transform="translate(79 103) rotate(${up?-90:90}) scale(1.1) translate(${-grip} 0)">${art}</g>`;
+const fingers=c=>F('ellipse','cx="79" cy="103" rx="3.6" ry="2.7"',c);
+const shieldOn=()=>`<g transform="translate(23 84) scale(.74)">${SHIELDS[1].svg}</g>`;
+const xbow=()=>R(4,-2.6,84,5.2,'wd',2)+`<path d="M70,-27 Q85,0 70,27" class="bow-u"/><path d="M70,-27 Q85,0 70,27" class="bow-s"/><path d="M70,-27 L43,0 L70,27" class="cord"/><ellipse cx="92" cy="0" rx="6" ry="4.6" class="o ln"/>`;
+const SOLD=[
+  {n:'Sergeant',fig:'medium',w:held(ART.shortSpear(),88),sh:1,wp:'Short Spear, Hand Ax or Mace, with a shield',ar:'Medium or light',dl:2,b:'+1″ on an engage walk action'},
+  {n:'Swordsman',fig:'medium',w:held(ART.armingSword(),11),sh:1,wp:'Arming Sword or Falchion, with a shield',ar:'Medium or light',dl:2,b:'+1″ on an engage walk action'},
+  {n:'Spearman',fig:'light',w:held(ART.longSpear(),88),wp:'Long Spear only',ar:'Medium or light',dl:2,b:'+1″ on a lunge step action'},
+  {n:'Billman',fig:'medium',w:held(ART.polearm(),88),wp:'Polearm only',ar:'Medium or light',dl:2,b:'+1″ on a lunge step action'},
+  {n:'Bowman',fig:'light',w:held(bow(4,186,0,-22),95).replace('translate(-95 0)','translate(-95 -11)'),wp:'Bow & Dagger only',ar:'Light only',dl:2,b:'+1″ on a shift step action'},
+  {n:'Crossbowman',fig:'light',w:held(xbow(),28,false),wp:'Crossbow & Dagger only',ar:'Light only',dl:2,b:'Ignores the complex weapon rules'},
+  {n:'Militia Levy',fig:'clothing',w:held(ART.farmTools(),88),wp:'Any improvised weapon',ar:'Clothing only',dl:1,b:'+1″ on a sprint run action. Cannot be given items.'},
+  {n:'Outlaw',fig:'light',w:held(ART.club(),10),wp:'Any improvised weapon',ar:'Medium or light',dl:2,b:'+1″ on a charge run action'},
+];
+document.getElementById('soldGrid').innerHTML=SOLD.map(s=>`<article class="armor">
+  <svg viewBox="-10 -88 124 292" role="img" aria-label="${s.n}">${FIG[s.fig]()}${s.w}${fingers(s.fig==='medium'?'leather':'skin')}${s.sh?shieldOn():''}</svg>
+  <h3>${s.n}</h3>
+  <p class="sl"><span>Weapons</span>${s.wp}</p>
+  <p class="sl"><span>Armor</span>${s.ar}</p>
+  <p class="sl"><span>Damage limit</span>${s.dl}</p>
+  <p class="sl"><span>Bonus</span>${s.b}</p>
+</article>`).join('');
+
+/* ---------- mounted knight ---------- */
+const hoof=x=>F('path',`d="M${x-6},188 L${x+6},188 L${x+8.5},196 L${x-8.5},196Z"`,'hair');
+const hleg=(x,k,f)=>limb(`${k},154 ${f},188`,11,'hose')+limb(`${x},134 ${k},154`,15,'hose')+hoof(f);
+document.getElementById('mount').innerHTML=`<svg viewBox="30 -14 206 222" role="img" aria-label="Mounted knight on a caparisoned horse">
+  <rect x="48" y="197" width="152" height="7" rx="3.5" class="f" style="fill:var(--rack)"/>
+  ${hleg(90,92,89)+hleg(158,156,159)}
+  <path d="M59,88 Q38,98 42,152 Q54,124 63,104Z" class="f hair"/>
+  <path d="M158,84 L184,42 Q191,29 203,34 L224,58 Q227,67 217,67 L204,61 L192,100Z" class="f hose"/>
+  <path d="M185,40 L158,84 L151,80 Q166,52 181,35Z" class="f hair"/>
+  <path d="M192,34 L193,22 L200,32Z" class="f hose"/><circle cx="204" cy="45" r="1.5" class="dk"/>
+  <path d="M207,38 L213,65 M213,65 L188,74" class="f" fill="none"/>
+  ${hleg(70,68,71)+hleg(176,179,176)}
+  <g transform="translate(92 -12) scale(.72)"><g clip-path="url(#cUp)">${heavyKnight()}${held(ART.armingSword(),11)}${fingers('mail')}${shieldOn()}</g></g>
+  <path d="M58,84 Q110,71 168,80 L190,98 L186,142 Q166,150 150,142 L140,150 Q112,142 98,150 L84,142 Q70,150 56,142Z" class="f sur"/>
+  <path d="M108,76 Q128,70 148,77 L146,86 Q128,82 110,86Z" class="f leather"/>
+  ${F('rect','x="74" y="98" width="4" height="26"','linen')+F('rect','x="66" y="107" width="20" height="4"','linen')}
+  ${limb('139,104 135,136',11,'mail')+limb('122,74 139,104',15,'mail')+F('circle','cx="139" cy="104" r="7"','steel')+F('path','d="M128,137 L147,137 Q150,144 146,145 L128,145Z"','mail')+'<path d="M124,146 L150,146" class="f" fill="none" style="stroke-width:2"/>'}
+</svg>
+<ul>
+  <li><b>One per side</b> in quick play. It replaces 1 foot knight if both players bring one, or 2 if only one player does.</li>
+  <li><b>Base:</b> 40 mm round or pill-shaped.</li>
+  <li><b>Weapons:</b> one-handed only. Contributes 2 initiative dice.</li>
+  <li><b>Combat:</b> +1 to the clash test on bash, light and heavy melee attacks, on top of other bonuses.</li>
+  <li><b>Damage limit 6.</b> At 4 or more damage the knight is dismounted and the horse flees: swap in a foot model with the same equipment, and damage beyond 4 carries over.</li>
+  <li>Many scenes are marked “No cavalry”, so keep a foot version of the same knight.</li>
+</ul>`;
+</script>
+
+</body></html>
